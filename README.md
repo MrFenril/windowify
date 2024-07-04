@@ -1,3 +1,12 @@
+## Installation
+
+```
+    git clone git@github.com:MrFenril/windowify.git
+    cd windowify
+    npm install
+    npm run dev
+```
+
 ## Usage
 
 -   `dev` - starts dev server
