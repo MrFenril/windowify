@@ -15,7 +15,7 @@ export interface IWindowOption {
 }
 
 type MoveListenerCallback = (x: number, y: number) => void;
-type WindowActionElement = (window: Window, headerActionOverlay: HTMLElement) => HTMLElement;
+type WindowActionElement = (window: Window, headerActionOverlay: HTMLElement) => Element;
 type SubHeaderElement = (window: Window, headerActionOverlay: HTMLElement) => HTMLElement;
 
 export class Window {
