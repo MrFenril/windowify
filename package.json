@@ -2,19 +2,24 @@
   "name": "windowify",
   "private": true,
   "version": "0.0.2",
-  "main": "./dist/windowify.js",
-  "module": "./dist/index.js",
+  "main": "./dist/windowify.cjs",
+  "module": "./dist/windowify.mjs",
   "exports": {
     ".": {
-      "require": "./dist/windowify.js",
-      "import": "./dist/windowify.mjs"
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/windowify.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/windowify.mjs"
+      }
     },
     "./dist/": {
       "import": "./dist/",
       "require": "./dist/"
     }
   },
-  "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build && dts-bundle-generator --config ./dts-bundle-generator.config.ts && copyfiles ./package.json dist",
