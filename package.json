@@ -2,6 +2,25 @@
   "name": "windowify",
   "private": true,
   "version": "0.0.2",
+  "description": "Simple library creating draggable windows",
+  "homepage": "https://github.com/MrFenril/windowify",
+  "author": {
+    "name": "Sébastien Rigolat"
+  },
+  "keywords": [
+    "draggable",
+    "window",
+    "component",
+    "ui",
+    "popup",
+    "modal",
+    "widget",
+    "windowify"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrFenril/windowify.git"
+  },
   "main": "./dist/windowify.cjs",
   "module": "./dist/windowify.mjs",
   "exports": {
