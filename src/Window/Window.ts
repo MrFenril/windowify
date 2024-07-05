@@ -151,10 +151,6 @@ export class Window {
         if (this.Header) this.Header.addEventListener("mousedown", this.dragMouseDown.bind(this));
         else this.Context.addEventListener("mousedown", this.dragMouseDown.bind(this));
 
-        // this._windowActions.forEach(option => {
-        //     new option({ parent: this.Context });
-        // });
-
         this._onElementDragClose = this.closeDragElement.bind(this);
         this._onElementDrag = this.elementDrag.bind(this);
         this._onElementLeave = this.mouseLeaveScreen.bind(this);
@@ -203,47 +199,39 @@ export class Window {
 
     private dragMouseDown(e: MouseEvent) {
         // get the mouse cursor position at startup:
-        this._pos3 = e.clientX;
-        this._pos4 = e.clientY;
+        this._pos3 = e.pageX;
+        this._pos4 = e.pageY;
         document.querySelectorAll(".draggable.focus").forEach(el => {
             el.classList.remove("focus");
         });
         this.Context.classList.add("focus");
 
-        this.Context.addEventListener("mouseup", this._onElementDragClose);
+        document.addEventListener("mouseup", this._onElementDragClose);
         document.addEventListener("mousemove", this._onElementDrag);
-        document.body.addEventListener("mouseleave", this._onElementLeave);
+        document.addEventListener("mouseleave", this._onElementLeave);
     }
 
     private elementDrag(e: MouseEvent) {
         this.Context.classList.remove("maximized");
 
         // calculate the new cursor position:
-        this._pos1 = this._pos3 - e.clientX;
-        this._pos2 = this._pos4 - e.clientY;
+        this._pos1 = this._pos3 - e.pageX;
+        this._pos2 = this._pos4 - e.pageY;
 
-        this._pos3 = e.clientX;
-        this._pos4 = e.clientY;
+        this._pos3 = e.pageX;
+        this._pos4 = e.pageY;
 
         const x: number = this.Context.offsetLeft - this._pos1;
         const y: number = this.Context.offsetTop - this._pos2;
-
-        // set the element's new position:
-        // this.Context.style.top = this.Context.offsetTop - this._pos2 + "px";
-        // this.Context.style.left = this.Context.offsetLeft - this._pos1 + "px";
 
         this.Move(x, y);
         this._onMoveListener.forEach(fn => fn(x, y));
     }
 
     private closeDragElement() {
-        // Reset position if outside of window
-        if (this.Context.offsetLeft < 0) this.Context.style.left = "0px";
-        if (this.Context.offsetTop < 0) this.Context.style.top = "0px";
-
         this.Context.classList.remove("focus");
 
-        this.Context.removeEventListener("mouseup", this._onElementDragClose);
+        document.removeEventListener("mouseup", this._onElementDragClose);
         document.removeEventListener("mousemove", this._onElementDrag);
         document.removeEventListener("mouseleave", this._onElementLeave);
     }
