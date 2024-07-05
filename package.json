@@ -1,6 +1,5 @@
 {
-  "name": "windowify",
-  "private": true,
+  "name": "windowified",
   "version": "0.0.2",
   "description": "Simple library creating draggable windows",
   "homepage": "https://github.com/MrFenril/windowify",
@@ -15,23 +14,23 @@
     "popup",
     "modal",
     "widget",
-    "windowify"
+    "windowified"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MrFenril/windowify.git"
   },
-  "main": "./dist/windowify.cjs",
-  "module": "./dist/windowify.mjs",
+  "main": "./dist/windowified.cjs",
+  "module": "./dist/windowified.mjs",
   "exports": {
     ".": {
       "require": {
         "types": "./dist/index.d.ts",
-        "default": "./dist/windowify.cjs"
+        "default": "./dist/windowified.cjs"
       },
       "import": {
         "types": "./dist/index.d.ts",
-        "default": "./dist/windowify.mjs"
+        "default": "./dist/windowified.mjs"
       }
     },
     "./dist/": {
@@ -39,6 +38,9 @@
       "require": "./dist/"
     }
   },
+  "files": [
+    "./dist/**"
+  ],
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build && dts-bundle-generator --config ./dts-bundle-generator.config.ts && copyfiles ./package.json dist",
