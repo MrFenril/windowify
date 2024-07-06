@@ -20,6 +20,7 @@
     "type": "git",
     "url": "git+https://github.com/MrFenril/windowify.git"
   },
+  "type": "module",
   "main": "./dist/windowified.cjs",
   "module": "./dist/windowified.mjs",
   "exports": {

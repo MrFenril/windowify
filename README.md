@@ -21,12 +21,12 @@ npm install windowified --save
 
 ```typescript
 import "windowified/dist/style.css";
-import { Window, Minimizeable, Maximazeable, Closable } from "windowified";
+import { Window, Minimisable, Maximazable, Closable } from "windowified";
 
 const w = new Window({
     windowTitle: "Window title",
     parent: document.getElementById("app"),
-    windowActions: [Minimizeable, Maximazeable, Closable],
+    windowActions: [Minimisable, Maximazable, Closable],
     x: 600,
     y: 50,
     resizeable: true,
@@ -71,7 +71,7 @@ After the DOM element defined, all you have to do is give to `Window` the node e
 
 ```typescript
 import "windowified/dist/style.css";
-import { Window, Minimizeable, Maximazeable, Closable } from "windowified";
+import { Window, Minimisable, Maximazable, Closable } from "windowified";
 
 const w = new Window({
     windowTitle: "Window Title",

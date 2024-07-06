@@ -19,14 +19,16 @@ const fileName = {
     es: `${getPackageName()}.mjs`,
     cjs: `${getPackageName()}.cjs`,
     iife: `${getPackageName()}.iife.js`,
+    umd: `${getPackageName()}.umd.js`,
 };
 const formats = Object.keys(fileName) as Array<keyof typeof fileName>;
 console.log(formats);
 
-module.exports = defineConfig({
+export default defineConfig({
     base: "./",
     build: {
         target: "ES6",
+        minify: true,
         outDir: "./dist",
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
@@ -34,6 +36,11 @@ module.exports = defineConfig({
             formats,
             fileName: format => {
                 return fileName[format];
+            },
+        },
+        rollupOptions: {
+            output: {
+                assetFileNames: "windowified.css",
             },
         },
     },
