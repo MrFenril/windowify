@@ -1,22 +1,28 @@
 import "./Window.css";
+import WindowActions from "../WindowActions/WindowActions";
 
 export interface IWindowOption {
     windowTitle?: string;
     id?: string;
     x: number;
     y: number;
-    windowActions?: WindowActionElement[];
+    windowActions?: WindowActionOption; //WindowActionElement[];
     subHeader?: SubHeaderElement[];
     width?: number;
     height?: number;
     parent?: HTMLElement | string | null;
+    clampInsideParent?: boolean;
     context?: HTMLElement;
     resizeable?: boolean;
 }
 
 type MoveListenerCallback = (x: number, y: number) => void;
-type WindowActionElement = (window: Window, headerActionOverlay: HTMLElement) => Element;
+type WindowActionElement = (window: Window, headerActionOverlay: HTMLElement, ...args: object[] | boolean[]) => Element;
 type SubHeaderElement = (window: Window, headerActionOverlay: HTMLElement) => HTMLElement;
+type actionNames = keyof typeof WindowActions;
+type WindowActionOption = {
+    [key in actionNames]: boolean | object;
+};
 
 export class Window {
     public _windowTitle!: string;
@@ -25,7 +31,7 @@ export class Window {
     protected _parent!: HTMLElement | null;
     protected _header: HTMLElement;
     protected _content: HTMLElement;
-    protected _windowActions: WindowActionElement[];
+    protected _windowActions: WindowActionOption;
 
     protected _options: IWindowOption;
 
@@ -55,18 +61,18 @@ export class Window {
     }
 
     constructor(options: IWindowOption) {
-        this._options = options;
-
         const {
             context,
             parent = null,
-            windowActions = [],
+            windowActions = {} as WindowActionOption,
             width = 100,
             height = 100,
             x = 0,
             y = 0,
             resizeable = false,
-        } = this._options;
+        } = options;
+
+        this._options = options;
         this._windowActions = windowActions;
 
         if (context) this.buildFromContext(context);
@@ -126,10 +132,16 @@ export class Window {
             windowHeader.appendChild(el);
         }
 
-        if (this._windowActions.length) {
+        const actionsEntries: [string, boolean | object][] = Object.entries(this._windowActions);
+        if (actionsEntries.length) {
             const actionsHeader = document.createElement("div");
-            this._windowActions.forEach(windowAction => {
-                const el = windowAction(this, actionsHeader);
+            actionsEntries.forEach(([actionKey, actionsValue]: [string, boolean | object]) => {
+                const action: WindowActionElement = WindowActions[actionKey as keyof typeof WindowActions];
+
+                if (!action) throw new Error(`${actionKey} window action not existing`);
+                else if (!actionsValue) return;
+
+                const el = action(this, actionsHeader, actionsValue);
                 actionsHeader.appendChild(el);
             });
             actionsHeader.classList.add("header-actions-overlay");
@@ -139,14 +151,14 @@ export class Window {
         return windowHeader;
     }
 
-    protected Init(width: number, height: number, resizeable: boolean) {
+    protected Init(_width: number, _height: number, resizeable: boolean) {
         if (resizeable) this.Context.classList.add("resizeable-draggable");
 
         this.Content.setAttribute("data-simplebar", "");
 
         this.Context.classList.add("draggable");
-        this.Context.style.width = `${width}px`;
-        this.Context.style.height = `${height}px`;
+        // this.Context.style.width = `${width}px`;
+        // this.Context.style.height = `${height}px`;
 
         if (this.Header) this.Header.addEventListener("mousedown", this.dragMouseDown.bind(this));
         else this.Context.addEventListener("mousedown", this.dragMouseDown.bind(this));
@@ -166,15 +178,32 @@ export class Window {
     }
 
     // #region Window actions
-    public Move(x: number, y: number, clamp: boolean = false) {
+    public Move(x: number, y: number, _clamp: boolean = false) {
         this.Context.style.left = x + "px";
         this.Context.style.top = y + "px";
 
         // Clamping not enabled, we don't have to check positions
-        if (!clamp) return;
+        // debugger;
+        // if (!clamp && !this._options.clampInsideParent) return;
 
-        if (this.Context.offsetLeft < 0) this.Context.style.left = "0px";
-        if (this.Context.offsetTop < 0) this.Context.style.top = "0px";
+        return;
+
+        const parentBounds = this._parent!.getBoundingClientRect();
+        const parentOffsetX = parentBounds.left + window.scrollX;
+        const parentOffsetY = parentBounds.top + window.scrollY;
+        // console.log(this._parent!.clientLeft, this._parent!.clientTop, x, y);
+
+        if (x < parentOffsetX) this.Context.style.left = `${parentOffsetX}px`;
+        else if (x + this.Context.clientWidth > parentBounds.width + window.scrollX + parentBounds.left) {
+            this.Context.style.left = `${parentBounds.width + window.scrollX + parentBounds.x - this.Context.clientWidth}px`;
+            // this._pos3 = parentBounds.width - this.Context.clientWidth;
+        }
+
+        if (y < parentOffsetY) this.Context.style.top = `${parentOffsetY}px`;
+        else if (y + this.Context.clientHeight > parentBounds.height + window.scrollY + parentBounds.y) {
+            this.Context.style.top = `${parentBounds.height + window.scrollY + parentBounds.y - this.Context.clientHeight}px`;
+            // this._pos4 = parentBounds.height - this.Context.offsetHeight;
+        }
     }
 
     public Show() {
@@ -223,6 +252,10 @@ export class Window {
 
         const x: number = this.Context.offsetLeft - this._pos1;
         const y: number = this.Context.offsetTop - this._pos2;
+
+        // const bounds = this.Context.getBoundingClientRect();
+        // const x: number = bounds.x - this._pos1;
+        // const y: number = bounds.y - this._pos2;
 
         this.Move(x, y);
         this._onMoveListener.forEach(fn => fn(x, y));

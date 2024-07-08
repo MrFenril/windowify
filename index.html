@@ -14,12 +14,24 @@
     <div id="MainModal">
       <div class="window-header">
       </div>
+
       <div class="window-content">
         <span>Test content</span>
       </div>
     </div>
     <div id="MainModal2">
       <div class="window-header">
+
+      </div>
+      <div class="window-subheader">
+        <div class="node-subheader">
+          <button>
+            test
+          </button>
+          <button>
+            test 2
+          </button>
+        </div>
       </div>
       <div class="window-content">
         <div>
@@ -47,7 +59,7 @@
   </div>
   <script type="module">
     import "./src/style.css"
-    import { Window, Minimizeable, Closable, Maximazeable } from './src/index.ts'
+    import { Window } from './src/index.ts'
 
     const w3 = new Window({
       windowTitle: "Title",
@@ -60,7 +72,9 @@
     const w2 = new Window({
       windowTitle: "Title",
       context: document.getElementById("MainModal2"),
-      windowActions: [Closable],
+      windowActions: {
+        closable: true,
+      },
       x: 350,
       y: 50,
       resizeable: true
@@ -69,13 +83,22 @@
     const w = new Window({
       windowTitle: "Window with a long title",
       parent: document.getElementById("app"),
-      windowActions: [Minimizeable, Maximazeable, Closable],
-      x: 600,
+      windowActions: {
+        minimisable: true,
+        collapsible: true,
+        maximizable: true,
+        closable: true,
+        optionsMenu: [
+          {
+            optionName: "close",
+            handler: (e, window) => window.Destroy()
+          }
+        ]
+      },
+      x: 0,
       y: 50,
       resizeable: true,
     });
-
-    document.body.appendChild(w2.Context);
   </script>
 </body>
 

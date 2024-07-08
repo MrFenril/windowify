@@ -3,13 +3,33 @@
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    height: 100%;
-    outline: 1px solid black;
-    position: relative;
+    height: 50%;
+    width: 50%;
+    outline: 2px solid red;
+    padding: 5px;
+    left: 100px;
 }
 
 html,
 body {
     height: 100%;
     top: 0px;
+    /* padding: 5px; */
+    /* overflow: hidden; */
+}
+
+html {
+    outline: 1px solid green;
+    background-color: aliceblue;
+}
+
+body {
+    outline: 2px solid blue;
+    background-color: rgb(185, 185, 185);
+    width: 90%;
+    /* left: 20px; */
+    margin: 20px;
+    margin-left: 20px;
+    padding: 20px;
+    /* position: relative; */
 }

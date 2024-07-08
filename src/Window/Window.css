@@ -11,7 +11,7 @@
     color: whitesmoke;
     font-family: sans-serif;
     overflow: hidden;
-    min-height: 200px;
+    min-height: 34px;
     min-width: 200px;
     border-radius: 5px;
     padding: 1px;
@@ -72,7 +72,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    height: 20px;
 }
 
 .window-header .header-actions-overlay:only-child {
@@ -85,20 +84,11 @@
     white-space: nowrap;
 }
 
-.window-header button {
-    padding: 0px;
-    width: 20px;
-    height: 20px;
-    background-color: transparent;
-    border: 0px;
-    border-radius: 4px;
-}
-
 .window-header button:hover {
     background-color: #c1c1c199;
 }
 
-.window-header button#close:hover {
+.window-header button.window-close-btn:hover {
     background-color: #ff4747;
 }
 
@@ -116,4 +106,49 @@
 .header-actions-overlay {
     display: flex;
     gap: 10px;
+}
+
+.window-subheader {
+    background-color: #121314;
+    border-bottom: 2px solid black;
+    border-top: 1px solid black;
+    display: flex;
+    padding: 5px;
+}
+
+.window-header-btn {
+    padding: 0px;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border: 0px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    fill: white;
+}
+
+.window-content .collapsed {
+    display: none;
+}
+
+.draggable.collapsed {
+    height: 34px !important;
+    resize: none;
+}
+
+.collapsible-btn {
+    color: white;
+    fill: white;
+}
+
+.window-dropdown {
+    display: flex;
+    background-color: white;
+    z-index: 100;
+    width: 100px;
+    border-radius: 5px;
+    position: absolute;
 }
